@@ -1,0 +1,95 @@
+TEMPERATUUR TOWER SETUP - ALLE MATERIALEN
+==========================================
+
+ALGEMENE INSTELLINGEN
+---------------------
+• Laag hoogte: 0.2mm
+• Print snelheid: 50mm/s (10-20mm/s voor TPU)
+• Infill: 15-20%
+
+CURA SETUP
+----------
+Extensions > Post Processing > Modify G-Code > Add "Change at Z"
+Voeg levels toe met: M104 S[temperatuur]
+
+═══════════════════════════════════════════════════════
+
+PLA (180-220°C)
+---------------
+Stappen: 5°C per 10 lagen
+Z-hoogtes (elke 2.0mm bij 0.2mm layers):
+  Start: 220°C
+  2.0mm  → M104 S215
+  4.0mm  → M104 S210
+  6.0mm  → M104 S205
+  8.0mm  → M104 S200
+  10.0mm → M104 S195
+  12.0mm → M104 S190
+  14.0mm → M104 S185
+  16.0mm → M104 S180
+
+Optimaal: 200-210°C
+Print tijd: ~45 min
+
+PETG (220-250°C)
+----------------
+Stappen: 10°C per 8 lagen
+Z-hoogtes (elke 1.6mm bij 0.2mm layers):
+  Start: 250°C
+  1.6mm → M104 S240
+  3.2mm → M104 S230
+  4.8mm → M104 S220
+
+Optimaal: 235-245°C
+Part cooling: 30-50%
+Bed: 70-80°C
+Print tijd: ~40 min
+
+ABS (210-250°C)
+---------------
+Stappen: 10°C per 6 lagen
+Z-hoogtes (elke 1.2mm bij 0.2mm layers):
+  Start: 250°C
+  1.2mm → M104 S240
+  2.4mm → M104 S230
+  3.6mm → M104 S220
+  4.8mm → M104 S210
+
+Optimaal: 240-250°C
+⚠ VEREIST: Gesloten behuizing
+⚠ Bed: 90-110°C
+⚠ Ventilatie (dampen!)
+Print tijd: ~40 min
+
+TPU (210-230°C)
+---------------
+Stappen: 10°C per 8 lagen
+Z-hoogtes (elke 1.6mm bij 0.2mm layers):
+  Start: 230°C
+  1.6mm → M104 S220
+  3.2mm → M104 S210
+
+Optimaal: 215-225°C
+Speed: 10-20mm/s (LANGZAAM!)
+Retraction: Minimaal
+Print tijd: ~60 min
+
+═══════════════════════════════════════════════════════
+
+EVALUATIE
+---------
+Kies niveau met:
+✓ Beste overhang kwaliteit
+✓ Minimale stringing
+✓ Goede layer adhesie
+✓ Gladste oppervlak
+
+PRUSASLICER/ORCASLICER
+----------------------
+Gebruik "Modifier" functie:
+1. Rechtermuisklik op model → Add modifier → Height range
+2. Stel Z-range in
+3. Wijzig temperatuur voor die range
+
+═══════════════════════════════════════════════════════
+YouTube: Werkplaats Marc - Basis Kalibratie Deel 1

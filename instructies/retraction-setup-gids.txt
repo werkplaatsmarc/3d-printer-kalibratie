@@ -1,0 +1,62 @@
+RETRACTION SETUP - ALLE MATERIALEN
+===================================
+
+PRINT INSTELLINGEN
+------------------
+• Laag hoogte: 0.2mm
+• Print snelheid: 50mm/s (40mm/s voor PETG, 15-25mm/s voor TPU)
+• Infill: 10%
+• Retraction in slicer: UIT
+
+CURA SETUP
+----------
+1. Extensions > Post Processing > Modify G-Code
+2. Add script "Change at Z"
+3. Voeg 7 levels toe (elke 10mm) met M207 S[waarde]
+
+═══════════════════════════════════════════════════════
+
+DIRECT DRIVE
+------------
+PLA:    1.0 → 1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0mm  | Speed: 30mm/s | Eindwaarde: 1.5-2.5mm
+PETG:   1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0 → 4.5mm  | Speed: 25mm/s | Eindwaarde: 2.5-3.5mm  
+ABS:    1.0 → 1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0mm  | Speed: 30mm/s | Eindwaarde: 1.5-2.5mm
+
+BOWDEN
+------
+PLA:    3.0 → 4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0mm   | Speed: 45mm/s | Eindwaarde: 4-6mm
+PETG:   4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0 → 10.0mm  | Speed: 45mm/s | Eindwaarde: 6-8mm
+ABS:    4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0 → 10.0mm  | Speed: 45mm/s | Eindwaarde: 5-7mm
+
+TPU (ALLE SYSTEMEN)
+-------------------
+0.2 → 0.5 → 0.8 → 1.0 → 1.2 → 1.5mm | Speed: 20mm/s | Eindwaarde: 0.5-1.0mm
+
+═══════════════════════════════════════════════════════
+
+G-CODE VOORBEELDEN
+------------------
+Z: 10mm, G-Code: M207 S2.0
+Z: 20mm, G-Code: M207 S2.5
+Z: 30mm, G-Code: M207 S3.0
+enz...
+
+EVALUATIE
+---------
+✓ Kies niveau met minste stringing
+✗ Te weinig = draden tussen towers
+✗ Te veel = gaps na retractions
+
+OPSLAAN MARLIN
+--------------
+M207 S[distance] F[speed]
+M500
+
+OPSLAAN KLIPPER
+---------------
+printer.cfg → [firmware_retraction]
+retract_length: [distance]
+retract_speed: [speed]
+
+═══════════════════════════════════════════════════════
+YouTube: Werkplaats Marc - Geavanceerde Kalibratie Deel 2

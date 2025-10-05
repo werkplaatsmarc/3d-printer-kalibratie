@@ -1,0 +1,81 @@
+BRIDGING SETUP - ALLE MATERIALEN
+=================================
+
+ALGEMENE INSTELLINGEN
+---------------------
+• Laag hoogte: 0.2mm
+• Bridge flow: 95%
+• Geen supports
+
+═══════════════════════════════════════════════════════
+
+PLA
+---
+STANDARD COOLING (1 fan):
+• Part cooling: 100%
+• Bridge speed: 15-25mm/s
+• Temperatuur: 195-200°C
+• Max span: 40-50mm
+
+UPGRADED COOLING (2+ fans):
+• Part cooling: 100%
+• Bridge speed: 20-30mm/s
+• Temperatuur: 195-200°C
+• Max span: 50-60mm
+
+PETG
+----
+STANDARD COOLING:
+• Part cooling: 50-70%
+• Bridge speed: 20-30mm/s
+• Temperatuur: 230-235°C
+• Max span: 30-40mm
+
+UPGRADED COOLING:
+• Part cooling: 70-90%
+• Bridge speed: 25-35mm/s
+• Temperatuur: 230-235°C
+• Max span: 40-50mm
+
+ABS
+---
+STANDARD COOLING:
+• Part cooling: 30-50%
+• Bridge speed: 25-35mm/s
+• Temperatuur: 245-250°C
+• Max span: 25-35mm
+⚠ Gesloten behuizing vereist
+
+UPGRADED COOLING:
+• Part cooling: 50-70%
+• Bridge speed: 30-40mm/s
+• Temperatuur: 245-250°C
+• Max span: 35-45mm
+⚠ Gesloten behuizing vereist
+
+TPU
+---
+• Part cooling: 50-80%
+• Bridge speed: 10-20mm/s (LANGZAAM!)
+• Temperatuur: 215-225°C
+• Max span: 20-30mm
+• Minimale retraction
+
+═══════════════════════════════════════════════════════
+
+EVALUATIE
+---------
+✓ Minimale sagging
+✓ Rechte lijnen (geen buiging)
+✓ Goede adhesie aan pillars
+✓ Geen stringing
+
+TIPS
+----
+• Lagere temp = betere bridging
+• Hogere fan = betere bridging
+• Langzamer = betere bridging
+• Eerste layer bridge is kritisch
+
+═══════════════════════════════════════════════════════
+YouTube: Werkplaats Marc - Geavanceerde Kalibratie

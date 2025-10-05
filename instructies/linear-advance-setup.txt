@@ -1,0 +1,141 @@
+LINEAR ADVANCE SETUP - MARLIN & KLIPPER
+========================================
+
+BESTAND
+-------
+linear-advance-test-pattern.stl
+
+ALGEMENE INSTELLINGEN
+---------------------
+• Laag hoogte: 0.2mm
+• Print speed: 60-120mm/s
+• Infill: 15%
+• Print tijd: 20-30 min
+
+═══════════════════════════════════════════════════════
+
+HOE TE GEBRUIKEN
+================
+
+1. Download linear-advance-test-pattern.stl
+2. Import in je slicer
+3. Voeg G-code toe voor jouw firmware (zie hieronder)
+4. Print en evalueer
+
+═══════════════════════════════════════════════════════
+
+MARLIN K-FACTOR
+===============
+
+WAARDES DIRECT DRIVE
+--------------------
+Range: 0.0 - 0.3
+Stappen: 0.03
+Typisch eindresultaat: 0.1-0.15
+
+PLA:  0.05-0.15
+PETG: 0.08-0.20
+ABS:  0.06-0.15
+
+WAARDES BOWDEN
+--------------
+Range: 0.0 - 0.8
+Stappen: 0.05
+Typisch eindresultaat: 0.4-0.6
+
+PLA:  0.3-0.6
+PETG: 0.4-0.8
+ABS:  0.3-0.7
+
+CURA - SEARCH AND REPLACE
+--------------------------
+Extensions > Post Processing > Modify G-Code
+Add script "Search and Replace" (meerdere keren!)
+
+Voorbeeld Direct Drive:
+Search: ;LAYER:10  | Replace: ;LAYER:10\nM900 K0.00
+Search: ;LAYER:20  | Replace: ;LAYER:20\nM900 K0.03
+Search: ;LAYER:30  | Replace: ;LAYER:30\nM900 K0.06
+... etc tot K0.30
+
+Voorbeeld Bowden:
+Search: ;LAYER:10  | Replace: ;LAYER:10\nM900 K0.00
+Search: ;LAYER:20  | Replace: ;LAYER:20\nM900 K0.05
+Search: ;LAYER:30  | Replace: ;LAYER:30\nM900 K0.10
+... etc tot K0.80
+
+INSTELLEN NA TEST
+-----------------
+M900 K0.15    ; Stel K-factor in
+M500          ; Bewaar naar EEPROM
+
+OF in Cura start G-code:
+M900 K0.15
+
+═══════════════════════════════════════════════════════
+
+KLIPPER PRESSURE ADVANCE
+=========================
+
+WAARDES DIRECT DRIVE
+--------------------
+Range: 0.000 - 0.060
+Stappen: 0.005
+Typisch eindresultaat: 0.025-0.04
+
+WAARDES BOWDEN
+--------------
+Range: 0.000 - 0.120
+Stappen: 0.005
+Typisch eindresultaat: 0.06-0.09
+
+ORCASLICER/PRUSASLICER
+----------------------
+Gebruik "Custom G-code" per layer:
+1. Preview > Layer slider
+2. Rechtermuisklik op layer > Insert custom G-code
+3. Voeg in: SET_PRESSURE_ADVANCE ADVANCE=0.000
+
+Herhaal voor elke 10 layers met oplopende waardes
+
+CURA - SEARCH AND REPLACE
+--------------------------
+Search: ;LAYER:10  | Replace: ;LAYER:10\nSET_PRESSURE_ADVANCE ADVANCE=0.000
+Search: ;LAYER:20  | Replace: ;LAYER:20\nSET_PRESSURE_ADVANCE ADVANCE=0.005
+Search: ;LAYER:30  | Replace: ;LAYER:30\nSET_PRESSURE_ADVANCE ADVANCE=0.010
+... etc
+
+INSTELLEN NA TEST
+-----------------
+Console:
+SET_PRESSURE_ADVANCE ADVANCE=0.032
+SAVE_CONFIG
+
+printer.cfg:
+[extruder]
+pressure_advance: 0.032
+
+PER FILAMENT MACRO:
+[gcode_macro SET_PA_PLA]
+gcode: SET_PRESSURE_ADVANCE ADVANCE=0.032
+
+═══════════════════════════════════════════════════════
+
+EVALUATIE
+---------
+✓ Scherpe 90° hoeken
+✓ Geen blobs bij richtingsveranderingen
+✓ Consistente lijndikte
+✓ Geen material buildup
+
+✗ Te laag = ronde hoeken, blobs
+✗ Te hoog = gaps, under-extrusie
+
+TIPS
+----
+• Test bij normale print speed (60-80mm/s)
+• Gebruik dezelfde temperatuur als je normaal print
+• Herhaal test na grote wijzigingen (nieuwe nozzle, ander filament merk)
+
+═══════════════════════════════════════════════════════
+YouTube: Werkplaats Marc - Linear Advance Tutorial

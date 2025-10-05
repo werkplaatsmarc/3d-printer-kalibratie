@@ -109,8 +109,9 @@ cd 3d-printer-kalibratie
 
 Alle kalibratie stappen worden uitgelegd in de **Werkplaats Marc YouTube serie**:
 
-- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Basis Kalibratie Deel 1</a> - Temperatuur towers
-- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Geavanceerde Kalibratie Deel 2</a> - Retraction & Linear Advance
+- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Basis Kalibratie Deel 1</a> - Komt binnenkort
+- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Geavanceerde Kalibratie Deel 2</a> - Komt binnenkort
+- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Input Shaping</a> - Komt binnenkort
 
 ## 🤝 Bijdragen
 

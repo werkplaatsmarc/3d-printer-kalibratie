@@ -9,7 +9,7 @@
 
 ## 🎯 Complete kalibratie serie
 
-Deze repository bevat **4 van de 10 essentiële kalibratie tests** voor je 3D printer. Alle tests (inclusief Bed Nivellering, Z-Afstand, E-Steps, PID Tuning, Flow Rate en Input Shaping) zijn te vinden op **<a href="https://werkplaatsmarc.be" target="_blank">werkplaatsmarc.be</a>** met complete Nederlandse tutorials.
+Deze repository bevat **5 van de 10 essentiële kalibratie tests** voor je 3D printer. Alle tests (inclusief Bed Nivellering, Z-Afstand, E-Steps, PID Tuning en Flow Rate) zijn te vinden op **<a href="https://werkplaatsmarc.be" target="_blank">werkplaatsmarc.be</a>** met complete Nederlandse tutorials.
 
 ## 📦 Wat zit er in deze repository?
 
@@ -37,6 +37,15 @@ Deze repository bevat **kant-en-klare kalibratie bestanden** voor je 3D printer,
 - **Universeel pattern** - Werkt voor Marlin K-Factor én Klipper Pressure Advance
 - Elimineer blobs en krijg CNC-scherpe hoeken
 
+### 🔧 Input Shaping (GEAVANCEERD)
+
+- **Python scripts** voor automatische resonantie analyse met ADXL345 accelerometer
+- **Data verzameling en analyse** - Identificeer resonantie frequenties automatisch
+- **Marlin & Klipper** firmware configuratie gegenereerd
+- Elimineer ghosting en ringing met 50-80% reductie
+- 20-40% hogere betrouwbare print snelheden
+- **Volledige Nederlandse tutorial** beschikbaar in `input-shaping/README_NL.md`
+
 ### 📚 Nederlandse Instructies
 
 Elke test komt met een **complete setup gids** in het Nederlands:
@@ -62,7 +71,7 @@ Daar vind je:
 7. Linear Advance ⬅️ _in deze repo_
 8. Flow Rate
 9. Bridging ⬅️ _in deze repo_
-10. Input Shaping
+10. Input Shaping ⬅️ _in deze repo_
 
 ## 🚀 Hoe te gebruiken?
 
@@ -76,6 +85,19 @@ Bezoek **<a href="https://werkplaatsmarc.be" target="_blank">werkplaatsmarc.be</
 git clone https://github.com/werkplaatsmarc/3d-printer-kalibratie.git
 cd 3d-printer-kalibratie
 ```
+
+### Optie 3: Input Shaping Setup
+
+Voor geavanceerde Input Shaping kalibratie:
+
+```bash
+cd input-shaping
+pip install -r requirements.txt
+python adxl_collect.py
+python analyze_data.py
+```
+
+Zie `input-shaping/README_NL.md` voor de complete tutorial.
 
 ## 📁 Repository structuur
 
@@ -98,6 +120,13 @@ cd 3d-printer-kalibratie
 ├── linear-advance-tests/
 │   └── linear-advance-test-pattern.stl
 │
+├── input-shaping/
+│   ├── adxl_collect.py          # Data verzameling script
+│   ├── analyze_data.py           # Automatische analyse
+│   ├── requirements.txt          # Python dependencies
+│   ├── README_NL.md              # Volledige Nederlandse tutorial
+│   └── ringing_tower.stl         # Test print voor validatie
+│
 └── instructies/
     ├── retraction-setup-gids.txt
     ├── temperatuur-tower-setup.txt
@@ -111,7 +140,7 @@ Alle kalibratie stappen worden uitgelegd in de **Werkplaats Marc YouTube serie**
 
 - <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Basis Kalibratie Deel 1</a> - Komt binnenkort
 - <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Geavanceerde Kalibratie Deel 2</a> - Komt binnenkort
-- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Input Shaping</a> - Komt binnenkort
+- <a href="https://youtube.com/@werkplaatsmarc" target="_blank">Input Shaping Tutorial</a> - Komt binnenkort
 
 ## 🤝 Bijdragen
 
@@ -139,8 +168,11 @@ A: Ja! STL bestanden werken met Cura, PrusaSlicer, Simplify3D, en alle andere sl
 **Q: Moet ik iets aanpassen in mijn slicer?**  
 A: Voor temperatuur towers: ja, volg de meegeleverde instructies om temperatuur te wijzigen per laag. Voor bridging en linear advance: nee, gewoon printen.
 
+**Q: Wat is Input Shaping en heb ik dat nodig?**  
+A: Input Shaping is een geavanceerde techniek om ghosting en ringing te elimineren. Het is optioneel maar geeft drastische kwaliteitsverbetering. Vereist een ADXL345 accelerometer sensor en Python kennis.
+
 **Q: Ik heb een probleem met een test, waar kan ik hulp krijgen?**  
 A: Join de <a href="https://discord.gg/UfztVFcR7g" target="_blank">Discord community</a> of stel een vraag onder de YouTube video's. De community helpt graag!
 
-**Q: Waar zijn de andere 6 kalibratie tests?**  
+**Q: Waar zijn de andere 5 kalibratie tests?**  
 A: Bezoek <a href="https://werkplaatsmarc.be" target="_blank">werkplaatsmarc.be</a> voor de complete 10-stappen kalibratie roadmap met alle tutorials en downloads.

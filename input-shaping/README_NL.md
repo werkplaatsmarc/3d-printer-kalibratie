@@ -51,11 +51,6 @@ Input Shaping is een geavanceerde firmware techniek die trillingen en resonantie
 - Voron series
 - Elke printer met Marlin 2.1+ of Klipper
 
-### Optioneel maar aanbevolen:
-
-- **3D printbare nozzle mount** voor ADXL345 (STL bestand in deze repository)
-- **Zip ties** of **M3 schroeven** voor montage
-
 ---
 
 ## 💻 Software Installatie
@@ -100,10 +95,8 @@ Dit installeert:
 
 ### ADXL345 Montage
 
-1. **Print de nozzle mount** (mounting_bracket.stl indien beschikbaar) in PLA of PETG
 2. **Monteer de ADXL345** op de nozzle mount met M3 schroeven of zip ties
-3. **Bevestig de mount** op je hotend/nozzle (zorg voor stevige bevestiging!)
-4. **Verbind USB-C kabel** van ADXL345 naar je laptop
+3. **Verbind USB-C kabel** van ADXL345 naar je laptop
 
 ### COM Poort Vinden (Windows)
 
@@ -496,7 +489,7 @@ Voor Klipper kun je ook de ingebouwde tools gebruiken:
 
 ### Werkplaats Marc Community
 
-- **YouTube:** [Input Shaping Tutorial](https://youtube.com/@werkplaatsmarc)
+- **YouTube:** [Input Shaping Tutorial](https://youtube.com/@werkplaatsmarc) Komt binnenkort
 - **Discord:** [discord.gg/werkplaatsmarc](https://discord.gg/UfztVFcR7g)
 - **Website:** [werkplaatsmarc.be](https://werkplaatsmarc.be)
 

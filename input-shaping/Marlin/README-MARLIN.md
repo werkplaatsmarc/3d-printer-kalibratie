@@ -610,6 +610,7 @@ De tool probeert 3200 Hz maar haalt ~30-60 Hz door USB limitaties.
 
 ## 🔗 Handige Links
 
+- **Web Analyzer (optioneel):** [werkplaatsmarc.be/adxl345-analyzer.html](https://werkplaatsmarc.be/adxl345-analyzer.html)
 - **Input Shaping Guide:** [werkplaatsmarc.be/input-shaping.html](https://werkplaatsmarc.be/input-shaping.html)
 - **YouTube Tutorial:** [@werkplaatsmarc](https://youtube.com/@werkplaatsmarc)
 - **Marlin Docs:** [marlinfw.org](https://marlinfw.org)

@@ -1,3 +1,380 @@
+<<<<<<< HEAD
+#!/bin/bash
+
+# ============================================================================
+# WERKPLAATS MARC - ADXL345 Data Verzameling & Analyse Tool
+# ============================================================================
+# Versie: 2.0 - Nu met geïntegreerde FFT analyse!
+# GitHub: https://github.com/werkplaatsmarc/3d-printer-kalibratie
+# ============================================================================
+
+# Color codes
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+# Detect OS
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    OS="Mac"
+    OPEN_CMD="open"
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    OS="Linux"
+    OPEN_CMD="xdg-open"
+    # Fallback voor sommige Linux systemen
+    if ! command -v xdg-open &> /dev/null; then
+        OPEN_CMD="nautilus"
+    fi
+else
+    OS="Unknown"
+    OPEN_CMD="echo"
+fi
+
+# Function: Load configuration
+load_config() {
+    if [ -f "config.txt" ]; then
+        source config.txt
+    else
+        USB_PORT="/dev/ttyUSB0"
+        DURATION=30
+        SAMPLE_RATE=3200
+    fi
+}
+
+# Function: Main menu
+show_menu() {
+    clear
+    echo -e "${BLUE}"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "             WERKPLAATS MARC - ADXL345 Tool v2.0 ($OS)"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo -e "${NC}"
+    echo "  🔧 ADXL345 Resonantie Analyse voor Input Shaping"
+    echo "     Nu met GEÏNTEGREERDE FFT ANALYSE!"
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "  [1] ⚡ Volledige kalibratie (verzamel + analyse)"
+    echo "  [2] 📊 Alleen data verzamelen"
+    echo "  [3] 🔬 Analyseer bestaand bestand"
+    echo "  [4] ⚙️  Configuratie wijzigen"
+    echo "  [5] ❓ Help en instructies"
+    echo "  [6] ❌ Afsluiten"
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+}
+
+# Function: Full calibration
+full_calibration() {
+    clear
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "                    VOLLEDIGE KALIBRATIE"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "  Deze modus verzamelt data EN voert direct FFT analyse uit!"
+    echo "  Je krijgt binnen enkele seconden je Input Shaping configuratie."
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    read -p "Druk op ENTER om te starten..."
+    
+    load_config
+    
+    # Generate output filename
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    output_file="adxl_data/resonance_${timestamp}.csv"
+    
+    # Check Python
+    if ! command -v python3 &> /dev/null; then
+        echo -e "${RED}❌ FOUT: Python3 niet gevonden!${NC}"
+        echo "   Run eerst install.sh"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Check dependencies
+    python3 -c "import numpy, scipy" 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ FOUT: NumPy/SciPy niet geïnstalleerd!${NC}"
+        echo "   Run eerst install.sh"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Run full calibration
+    echo ""
+    echo -e "${GREEN}🚀 Start volledige kalibratie...${NC}"
+    echo ""
+    python3 python/adxl_collect.py "$USB_PORT" $DURATION $SAMPLE_RATE "$output_file"
+    
+    if [ $? -ne 0 ]; then
+        echo ""
+        echo -e "${RED}❌ Er is een fout opgetreden${NC}"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Ask to open folder
+    echo ""
+    read -p "Wil je de output folder openen? (y/n): " open_folder
+    if [[ "$open_folder" =~ ^[Yy]$ ]]; then
+        $OPEN_CMD "adxl_data" 2>/dev/null || echo "Kon folder niet openen"
+    fi
+    
+    echo ""
+    read -p "Druk op ENTER om terug te gaan..."
+}
+
+# Function: Collect only
+collect_only() {
+    clear
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "                    ALLEEN DATA VERZAMELEN"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "  Deze modus verzamelt alleen data ZONDER analyse."
+    echo "  Je kunt de analyse later uitvoeren via optie [3]."
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    read -p "Druk op ENTER om te starten..."
+    
+    load_config
+    
+    # Generate output filename
+    timestamp=$(date +"%Y%m%d_%H%M%S")
+    output_file="adxl_data/data_only_${timestamp}.csv"
+    
+    # Check Python
+    if ! command -v python3 &> /dev/null; then
+        echo -e "${RED}❌ FOUT: Python3 niet gevonden!${NC}"
+        echo "   Run eerst install.sh"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Collect data without analysis
+    echo ""
+    echo -e "${GREEN}📊 Start data verzameling...${NC}"
+    echo ""
+    python3 python/adxl_collect.py "$USB_PORT" $DURATION $SAMPLE_RATE "$output_file" --no-analyze
+    
+    echo ""
+    read -p "Druk op ENTER om terug te gaan..."
+}
+
+# Function: Analyze existing file
+analyze_only() {
+    clear
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "                 ANALYSEER BESTAAND BESTAND"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "  Beschikbare CSV bestanden in adxl_data/:"
+    echo ""
+    
+    if ls adxl_data/*.csv 1> /dev/null 2>&1; then
+        ls -1 adxl_data/*.csv
+    else
+        echo "  (Geen bestanden gevonden)"
+    fi
+    
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    read -p "Geef bestandsnaam (of volledig pad): " csv_file
+    
+    if [ -z "$csv_file" ]; then
+        echo -e "${RED}❌ Geen bestand opgegeven${NC}"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # If only filename, add adxl_data/ prefix
+    if [[ ! "$csv_file" =~ ^/ ]] && [[ ! -f "$csv_file" ]]; then
+        csv_file="adxl_data/$csv_file"
+    fi
+    
+    # Check if file exists
+    if [ ! -f "$csv_file" ]; then
+        echo -e "${RED}❌ FOUT: Bestand niet gevonden: $csv_file${NC}"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Check dependencies
+    python3 -c "import numpy, scipy" 2>/dev/null
+    if [ $? -ne 0 ]; then
+        echo -e "${RED}❌ FOUT: NumPy/SciPy niet geïnstalleerd!${NC}"
+        echo "   Run eerst install.sh"
+        read -p "Druk op ENTER om terug te gaan..."
+        return
+    fi
+    
+    # Run analysis
+    echo ""
+    echo -e "${GREEN}🔬 Start analyse...${NC}"
+    echo ""
+    python3 python/adxl_collect.py --analyze "$csv_file"
+    
+    echo ""
+    read -p "Druk op ENTER om terug te gaan..."
+}
+
+# Function: Configuration
+configure() {
+    clear
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "                         CONFIGURATIE"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    
+    # Auto-detect USB devices
+    echo "🔍 Zoeken naar USB devices..."
+    echo ""
+    
+    if [[ "$OS" == "Mac" ]]; then
+        usb_devices=($(ls /dev/tty.usb* 2>/dev/null))
+    else
+        usb_devices=($(ls /dev/ttyUSB* /dev/ttyACM* 2>/dev/null))
+    fi
+    
+    if [ ${#usb_devices[@]} -gt 0 ]; then
+        echo -e "${GREEN}✅ Gevonden USB devices:${NC}"
+        for i in "${!usb_devices[@]}"; do
+            echo "  [$((i+1))] ${usb_devices[$i]}"
+        done
+        echo ""
+        read -p "Kies een device (1-${#usb_devices[@]}) of geef handmatig op: " device_choice
+        
+        if [[ "$device_choice" =~ ^[0-9]+$ ]] && [ "$device_choice" -ge 1 ] && [ "$device_choice" -le ${#usb_devices[@]} ]; then
+            USB_PORT="${usb_devices[$((device_choice-1))]}"
+        else
+            USB_PORT="$device_choice"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Geen USB devices gevonden${NC}"
+        echo ""
+        read -p "Geef USB device handmatig op (bijv. /dev/ttyUSB0): " USB_PORT
+    fi
+    
+    # Duration
+    echo ""
+    echo "⏱️  Data verzamel duur"
+    echo "   Aanbevolen: 30 seconden"
+    echo ""
+    read -p "Duur in seconden (standaard 30): " duration_input
+    DURATION=${duration_input:-30}
+    
+    # Sample rate (not changeable but show)
+    SAMPLE_RATE=3200
+    
+    # Save configuration
+    cat > config.txt << EOF
+USB_PORT=$USB_PORT
+DURATION=$DURATION
+SAMPLE_RATE=$SAMPLE_RATE
+EOF
+    
+    echo ""
+    echo -e "${GREEN}✅ Configuratie opgeslagen:${NC}"
+    echo "   USB Device: $USB_PORT"
+    echo "   Duur: $DURATION seconden"
+    echo "   Target Sample Rate: $SAMPLE_RATE Hz"
+    echo ""
+    echo "   📝 OPMERKING: De werkelijke sample rate is ~30-60 Hz"
+    echo "      door USB communicatie beperkingen. Dit is normaal!"
+    echo ""
+    read -p "Druk op ENTER om terug te gaan..."
+}
+
+# Function: Help
+show_help() {
+    clear
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo "                     HELP EN INSTRUCTIES"
+    echo "════════════════════════════════════════════════════════════════════════"
+    echo ""
+    echo "📋 BENODIGDHEDEN:"
+    echo "   • BigTreeTech ADXL345 v2.0 accelerometer"
+    echo "   • USB verbinding naar je computer"
+    echo "   • 3D printer met Marlin of Klipper firmware"
+    echo "   • ADXL345 gemonteerd op de nozzle/printhead"
+    echo ""
+    echo "🔌 AANSLUITING ($OS):"
+    echo "   1. Sluit ADXL345 aan via USB op je computer"
+    if [[ "$OS" == "Mac" ]]; then
+        echo "   2. Check USB device met: ls /dev/tty.usb*"
+    else
+        echo "   2. Check USB device met: ls /dev/ttyUSB*"
+    fi
+    echo "   3. Configureer via optie [4]"
+    echo ""
+    echo "🚀 QUICK START:"
+    echo "   1. Run ./install.sh (eerste keer)"
+    echo "   2. Monteer ADXL345 stevig op de nozzle"
+    echo "   3. Kies optie [1] voor volledige kalibratie"
+    echo "   4. Wacht ~30 seconden voor data verzameling"
+    echo "   5. Analyse gebeurt automatisch (2-3 seconden)"
+    echo "   6. Kopieer de G-code naar je printer terminal"
+    echo "   7. Voer M500 uit om op te slaan"
+    echo ""
+    echo "📊 WORKFLOW OPTIES:"
+    echo "   Optie [1] - AANBEVOLEN voor de meeste gebruikers"
+    echo "             Doet alles automatisch in één keer"
+    echo "   "
+    echo "   Optie [2] - Voor gevorderde gebruikers"
+    echo "             Verzamel data nu, analyseer later"
+    echo "   "
+    echo "   Optie [3] - Analyseer oude data opnieuw"
+    echo "             Handig voor troubleshooting"
+    echo ""
+    echo "⚙️  NA KALIBRATIE:"
+    echo "   1. Print een test object (ringing tower)"
+    echo "   2. Vergelijk met print ZONDER Input Shaping"
+    echo "   3. Verwacht 50-80% reductie in ringing"
+    echo ""
+    echo "🌐 ONLINE RESOURCES:"
+    echo "   • GitHub: github.com/werkplaatsmarc/3d-printer-kalibratie"
+    echo "   • Website: werkplaatsmarc.be/input-shaping.html"
+    echo "   • YouTube: youtube.com/@werkplaatsmarc"
+    echo ""
+    echo "════════════════════════════════════════════════════════════════════════"
+    read -p "Druk op ENTER om terug te gaan..."
+}
+
+# Main loop
+while true; do
+    show_menu
+    read -p "Maak een keuze (1-6): " choice
+    
+    case $choice in
+        1) full_calibration ;;
+        2) collect_only ;;
+        3) analyze_only ;;
+        4) configure ;;
+        5) show_help ;;
+        6) 
+            echo ""
+            echo "👋 Bedankt voor het gebruiken van Werkplaats Marc ADXL345 Tool!"
+            echo "   Bezoek werkplaatsmarc.be voor meer kalibratie guides."
+            echo ""
+            exit 0
+            ;;
+        *) 
+            echo -e "${RED}Ongeldige keuze${NC}"
+            sleep 1
+            ;;
+    esac
+done
+=======
 #!/bin/bash
 
 # ============================================================================
@@ -424,3 +801,4 @@ main_menu() {
 
 # Start het programma
 main_menu
+>>>>>>> cf6473c415b34583da961cdf5fbd2fe95f503f53

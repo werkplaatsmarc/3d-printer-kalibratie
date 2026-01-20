@@ -1,104 +1,103 @@
 ================================================================================
-RETRACTION INSTELLEN - CURA & ORCASLICER
+RETRACTION TOWER KALIBRATIE - CURA HANDLEIDING
 Werkplaats Marc - werkplaatsmarc.be
 ================================================================================
 
-WAT IS RETRACTION?
-------------------
-Retraction trekt filament terug bij travel moves om stringing te voorkomen.
-Direct Drive: 0.2-1.0mm
-Bowden: 2-10mm
-TPU: 0-1.2mm (lage snelheid!)
+RETRACTION TOWER TEST
+---------------------
+Test automatisch verschillende retraction afstanden in één print.
+Tower heeft 2 kolommen met 18mm gap - check tussen kolommen voor stringing!
 
 
-CURA INSTELLEN
+METHODE 1: CALIBRATION SHAPES PLUGIN (MAKKELIJKST!)
 ================================================================================
 
-STAP 1: Visibility inschakelen
--------------------------------
-1. Klik rechtsboven op "Custom" dropdown
-2. Klik op "All" of zoek "retraction"
-3. Vink aan:
-   ☑ Retraction Distance
-   ☑ Retraction Speed
-   ☑ Retraction Retract Speed (optioneel)
-   ☑ Retraction Prime Speed (optioneel)
+INSTALLATIE
+-----------
+1. Open Cura
+2. Klik: Marketplace (bovenin menu)
+3. Zoek: "Calibration Shapes"
+4. Klik: Install (van 5@xes)
+5. Herstart Cura
 
-STAP 2: Retraction Distance instellen
---------------------------------------
-Zoek "Retraction Distance" in settings
-
-Direct Drive starten met:    0.6mm
-Bowden starten met:          6.0mm
-TPU starten met:             0.3mm
-
-STAP 3: Retraction Speed instellen
------------------------------------
-Zoek "Retraction Speed" in settings
-
-Direct Drive:                45 mm/s
-Bowden:                      25 mm/s
-TPU:                         25 mm/s
-
-STAP 4: Optionele settings
+RETRACTION TOWER GENEREREN
 ---------------------------
-"Retraction Retract Speed" = snelheid bij intrekken
-"Retraction Prime Speed" = snelheid bij terugduwen
+1. Klik: Extensions > Calibration Shapes > Add a Retraction Tower
+2. Plugin genereert automatisch de tower!
+3. Slice normaal
+4. Print en evalueer
 
-Meestal beide gelijk houden aan Retraction Speed!
+WAAROM DIT DE BESTE METHODE IS:
+- Automatisch tower model
+- Geen handmatig werk
+- Direct klaar voor printen
 
 
-ORCASLICER INSTELLEN
+METHODE 2: POST PROCESSING SCRIPT (INGEBOUWD IN CURA)
 ================================================================================
 
-STAP 1: Filament Settings openen
----------------------------------
-1. Klik bovenin op "Filament Settings" tab (icoon met filament rol)
-2. Of: Printer Settings > Filament
+DEZE METHODE ALS JE CALIBRATION SHAPES NIET WILT INSTALLEREN
 
-STAP 2: Retraction instellingen vinden
----------------------------------------
-Scroll naar sectie: "Retraction"
+STAP 1: Download Tower STL
+---------------------------
+Download van werkplaatsmarc.be/retraction.html:
+- retraction-tower-direct.stl (Direct Drive)
+- retraction-tower-bowden.stl (Bowden)
+- retraction-tower-tpu.stl (TPU)
 
-Je ziet:
-- Length (retraction distance)
-- Lift Z (optioneel)
-- Speed
-  - Retraction Speed
-  - Deretraction Speed
-
-STAP 3: Length (afstand) instellen
------------------------------------
-Direct Drive:                0.6mm
-Bowden:                      6.0mm
-TPU:                         0.3mm
-
-STAP 4: Speed instellen
+STAP 2: Import en Slice
 ------------------------
-Retraction Speed:
-  Direct Drive:              45 mm/s
-  Bowden:                    25 mm/s
-  TPU:                       25 mm/s
+1. Sleep STL naar Cura
+2. Zet retraction settings:
+   - Enable Retraction: AAN
+   - Retraction Distance: Start waarde (bijv. 2mm voor bowden)
+   - Retraction Speed: 25mm/s (bowden) of 45mm/s (direct drive)
+3. Slice de tower
 
-Deretraction Speed:
-  Meestal GELIJK aan Retraction Speed!
+STAP 3: Post Processing Script Toevoegen
+-----------------------------------------
+1. Ga naar: Extensions > Post Processing > Modify G-Code
+2. Klik: Add a script
+3. Kies: RetractTower
+4. Stel in:
 
-STAP 5: Settings opslaan
--------------------------
-1. Klik rechtsboven op diskette icoon
-2. Of: File > Save
+   VOOR DIRECT DRIVE:
+   VOOR DIRECT DRIVE:
+   - Command: Distance
+   - Starting Value: 0.2
+   - Value Increment: 0.2
+   - Change Layer: elke 25 layers (voor 0.2mm layer height = 5mm)
+   
+   VOOR BOWDEN:
+   - Command: Distance  
+   - Starting Value: 2
+   - Value Increment: 2
+   - Change Layer: elke 25 layers (voor 0.2mm layer height = 5mm)
+
+5. Klik: Close
+6. Slice opnieuw (Cura past nu G-code automatisch aan!)
+7. Print!
+
+BELANGRIJKE OPMERKING:
+De script werkt ALLEEN als je "Enable Retraction" hebt aangezet in Cura
+en een retraction distance > 0mm hebt ingesteld!
 
 
-RETRACTION TOWER TESTEN
+TOWER EVALUEREN
 ================================================================================
 
-Na het instellen van deze basis waarden:
+LEES VAN ONDER NAAR BOVEN
+--------------------------
+1. Onderste sectie = Laagste retraction waarde
+2. Check tussen de twee kolommen voor stringing draden  
+3. Welke sectie heeft MINSTE stringing?
+4. Noteer die retraction waarde
 
-1. Download retraction tower STL van werkplaatsmarc.be/retraction.html
-2. Slice met bovenstaande settings
-3. Print de tower
-4. Bekijk tussen de twee kolommen welke sectie minste stringing heeft
-5. Pas Retraction Distance aan op basis van beste sectie
+BESTE WAARDE TOEPASSEN IN CURA
+-------------------------------
+1. Zoek "Retraction Distance" in settings
+2. Vul de beste waarde in
+3. Save als nieuw filament profiel
 
 
 TROUBLESHOOTING
@@ -114,28 +113,27 @@ TE VEEL STRINGING?
 UNDER-EXTRUSIE NA TRAVEL?
 --------------------------
 → Verlaag Retraction Distance met 0.2mm stappen
-→ Verhoog Retraction Speed
+→ Verhoog Retraction Speed  
 → Check extruder spanning (te strak = slippen)
 → Check bowden tube (slijtage?)
 
 BLOBS BIJ START NIEUWE LAAG?
 -----------------------------
 → Retraction Distance iets verhogen
-→ "Retraction at Layer Change" activeren (Cura)
+→ "Retraction at Layer Change" activeren
 → Z-Hop activeren (optioneel)
 
 
 BELANGRIJKE OPMERKINGEN
 ================================================================================
 
-✓ Start ALTIJD met deze basis waardes
-✓ Wijzig in kleine stappen (0.2-0.5mm)
-✓ Test elke wijziging met een print
+✓ Calibration Shapes plugin is MAKKELIJKSTE methode
+✓ Post Processing Script werkt alleen met "Enable Retraction" AAN
 ✓ Noteer je beste settings per filament type
 ✓ Verschillende filament merken = verschillende settings!
 
 ✗ NOOIT boven 2mm voor Direct Drive
-✗ NOOIT boven 15mm voor Bowden
+✗ NOOIT boven 15mm voor Bowden  
 ✗ TPU heel voorzichtig met retraction (vaak 0mm beste!)
 
 

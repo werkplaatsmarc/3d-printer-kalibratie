@@ -1,95 +1,273 @@
-TEMPERATUUR TOWER SETUP - ALLE MATERIALEN
-==========================================
+================================================================================
+TEMPERATUUR TOWER KALIBRATIE - CURA HANDLEIDING
+Werkplaats Marc - werkplaatsmarc.be
+================================================================================
 
-ALGEMENE INSTELLINGEN
----------------------
-• Laag hoogte: 0.2mm
-• Print snelheid: 50mm/s (10-20mm/s voor TPU)
-• Infill: 15-20%
+WAT IS EEN TEMPERATUUR TOWER?
+------------------------------
+Test verschillende temperaturen in één print om de optimale temperatuur te 
+vinden voor elk specifiek filament. Elke sectie print op een andere temperatuur.
 
-CURA SETUP
-----------
-Extensions > Post Processing > Modify G-Code > Add "Change at Z"
-Voeg levels toe met: M104 S[temperatuur]
 
-═══════════════════════════════════════════════════════
+METHODE 1: CALIBRATION SHAPES PLUGIN (MAKKELIJKST!)
+================================================================================
+
+INSTALLATIE
+-----------
+1. Open Cura
+2. Klik: Marketplace (rechtsboven)
+3. Zoek: "Calibration Shapes"
+4. Klik: Install (van 5@xes)
+5. Herstart Cura
+
+TEMPERATUUR TOWER GENEREREN
+----------------------------
+1. Klik: Extensions > Part for calibration
+2. Kies je filament type:
+   - Add a PLA Temp Tower
+   - Add a PETG Temp Tower
+   - Add a ABS Temp Tower
+   (of gebruik "Add a Temp Tower" voor custom range)
+
+3. De tower wordt automatisch toegevoegd!
+
+4. Ga naar: Extensions > Post Processing > Modify G-Code
+5. Je ziet automatisch "TempFanTower" script toegevoegd
+6. Controleer de instellingen (normaal al correct!)
+
+7. Slice en print!
+
+WAAROM DIT DE BESTE METHODE IS:
+- Automatisch tower model
+- Automatisch post processing script
+- Geen handmatig rekenwerk
+- Direct klaar voor printen
+
+
+METHODE 2: POST PROCESSING SCRIPT (HANDMATIGE STL)
+================================================================================
+
+DEZE METHODE ALS JE CALIBRATION SHAPES NIET WILT INSTALLEREN
+
+STAP 1: Download Tower STL
+---------------------------
+Download van werkplaatsmarc.be/temperatuur.html:
+- temp-tower-PLA.stl (180-220°C)
+- temp-tower-PETG.stl (220-250°C)
+- temp-tower-ABS.stl (210-250°C)
+- temp-tower-TPU.stl (210-230°C)
+
+STAP 2: Import in Cura
+-----------------------
+1. Sleep STL naar Cura
+2. Slice NIET meteen!
+
+STAP 3: Post Processing Script Toevoegen
+-----------------------------------------
+1. Ga naar: Extensions > Post Processing > Modify G-Code
+2. Klik: Add a script
+3. Kies: ChangeAtZ (meerdere keren toevoegen!)
+
+CONFIGURATIE PER FILAMENT TYPE:
+
+═══════════════════════════════════════════════════════════════════════════
 
 PLA (180-220°C)
----------------
-Stappen: 5°C per 10 lagen
-Z-hoogtes (elke 2.0mm bij 0.2mm layers):
-  Start: 220°C
-  2.0mm  → M104 S215
-  4.0mm  → M104 S210
-  6.0mm  → M104 S205
-  8.0mm  → M104 S200
-  10.0mm → M104 S195
-  12.0mm → M104 S190
-  14.0mm → M104 S185
-  16.0mm → M104 S180
+===============
 
-Optimaal: 200-210°C
-Print tijd: ~45 min
+Laag hoogte: 0.2mm
+Elke sectie = 50 layers (10mm @ 0.2mm layer height)
+
+Voeg 8x ChangeAtZ script toe met deze waardes:
+
+Script 1:
+- Trigger: Height
+- Change Height: 10.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 215
+
+Script 2:
+- Trigger: Height  
+- Change Height: 20.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 210
+
+Script 3:
+- Trigger: Height
+- Change Height: 30.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 205
+
+Script 4:
+- Trigger: Height
+- Change Height: 40.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 200
+
+Script 5:
+- Trigger: Height
+- Change Height: 50.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 195
+
+Script 6:
+- Trigger: Height
+- Change Height: 60.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 190
+
+Script 7:
+- Trigger: Height
+- Change Height: 70.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 185
+
+Script 8:
+- Trigger: Height
+- Change Height: 80.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 180
+
+Start temperatuur in Cura: 220°C
+Optimaal resultaat meestal: 200-210°C
+
+═══════════════════════════════════════════════════════════════════════════
 
 PETG (220-250°C)
-----------------
-Stappen: 10°C per 8 lagen
-Z-hoogtes (elke 1.6mm bij 0.2mm layers):
-  Start: 250°C
-  1.6mm → M104 S240
-  3.2mm → M104 S230
-  4.8mm → M104 S220
+================
 
-Optimaal: 235-245°C
-Part cooling: 30-50%
-Bed: 70-80°C
-Print tijd: ~40 min
+Laag hoogte: 0.2mm
+Elke sectie = 40 layers (8mm @ 0.2mm layer height)
+
+Voeg 3x ChangeAtZ script toe:
+
+Script 1:
+- Trigger: Height
+- Change Height: 8.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 240
+
+Script 2:
+- Trigger: Height
+- Change Height: 16.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 230
+
+Script 3:
+- Trigger: Height
+- Change Height: 24.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 220
+
+Start temperatuur in Cura: 250°C
+Optimaal resultaat meestal: 235-245°C
+⚠️ Part cooling: 30-50%
+⚠️ Bed: 70-80°C
+
+═══════════════════════════════════════════════════════════════════════════
 
 ABS (210-250°C)
----------------
-Stappen: 10°C per 6 lagen
-Z-hoogtes (elke 1.2mm bij 0.2mm layers):
-  Start: 250°C
-  1.2mm → M104 S240
-  2.4mm → M104 S230
-  3.6mm → M104 S220
-  4.8mm → M104 S210
+===============
 
-Optimaal: 240-250°C
-⚠ VEREIST: Gesloten behuizing
-⚠ Bed: 90-110°C
-⚠ Ventilatie (dampen!)
-Print tijd: ~40 min
+Laag hoogte: 0.2mm
+Elke sectie = 30 layers (6mm @ 0.2mm layer height)
+
+Voeg 4x ChangeAtZ script toe:
+
+Script 1:
+- Trigger: Height
+- Change Height: 6.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 240
+
+Script 2:
+- Trigger: Height
+- Change Height: 12.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 230
+
+Script 3:
+- Trigger: Height
+- Change Height: 18.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 220
+
+Script 4:
+- Trigger: Height
+- Change Height: 24.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 210
+
+Start temperatuur in Cura: 250°C
+Optimaal resultaat meestal: 240-250°C
+⚠️ VEREIST: Gesloten behuizing
+⚠️ Bed: 90-110°C
+⚠️ Ventilatie (dampen!)
+
+═══════════════════════════════════════════════════════════════════════════
 
 TPU (210-230°C)
----------------
-Stappen: 10°C per 8 lagen
-Z-hoogtes (elke 1.6mm bij 0.2mm layers):
-  Start: 230°C
-  1.6mm → M104 S220
-  3.2mm → M104 S210
+===============
 
-Optimaal: 215-225°C
-Speed: 10-20mm/s (LANGZAAM!)
-Retraction: Minimaal
-Print tijd: ~60 min
+Laag hoogte: 0.2mm
+Elke sectie = 40 layers (8mm @ 0.2mm layer height)
 
-═══════════════════════════════════════════════════════
+Voeg 2x ChangeAtZ script toe:
 
-EVALUATIE
----------
-Kies niveau met:
-✓ Beste overhang kwaliteit
-✓ Minimale stringing
-✓ Goede layer adhesie
-✓ Gladste oppervlak
+Script 1:
+- Trigger: Height
+- Change Height: 8.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 220
 
-PRUSASLICER/ORCASLICER
-----------------------
-Gebruik "Modifier" functie:
-1. Rechtermuisklik op model → Add modifier → Height range
-2. Stel Z-range in
-3. Wijzig temperatuur voor die range
+Script 2:
+- Trigger: Height
+- Change Height: 16.0
+- Change Extruder 1 Temp: ☑
+- Extruder 1 Temp: 210
 
-═══════════════════════════════════════════════════════
-YouTube: Werkplaats Marc - Basis Kalibratie Deel 1
+Start temperatuur in Cura: 230°C
+Optimaal resultaat meestal: 215-225°C
+⚠️ Print speed: 10-20mm/s (LANGZAAM!)
+⚠️ Retraction: Minimaal of 0mm
+
+═══════════════════════════════════════════════════════════════════════════
+
+
+TOWER EVALUEREN
+================================================================================
+
+CHECK PER SECTIE:
+-----------------
+✓ Overhang kwaliteit (schuine wanden)
+✓ Bridging prestatie (hangende delen)
+✓ Layer adhesie (laag hechting)
+✓ Oppervlakte kwaliteit (gladheid)
+✓ Stringing (draadjes tussen delen)
+
+BESTE SECTIE = OPTIMALE TEMPERATUUR!
+
+
+BELANGRIJKE TIPS
+================================================================================
+
+✓ Calibration Shapes plugin is MAKKELIJKSTE methode
+✓ Vergeet niet scripts te verwijderen voor volgende print!
+✓ Test elke nieuwe filament rol (variatie tussen batches)
+✓ Noteer beste temperatuur per merk/type
+
+✗ Vergeet niet om na de test de scripts te verwijderen!
+✗ Check altijd de G-code preview voor je print
+
+
+VRAGEN?
+================================================================================
+YouTube: @werkplaatsmarc
+Website: werkplaatsmarc.be
+Discord: discord.gg/UfztVFcR7g
+
+Video: Basis Kalibratie Deel 1
+https://youtu.be/bODkCM9mSGk
+
+Succes met calibreren!
+- Marc

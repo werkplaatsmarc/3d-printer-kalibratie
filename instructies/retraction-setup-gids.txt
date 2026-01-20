@@ -1,62 +1,149 @@
-RETRACTION SETUP - ALLE MATERIALEN
-===================================
+================================================================================
+RETRACTION INSTELLEN - CURA & ORCASLICER
+Werkplaats Marc - werkplaatsmarc.be
+================================================================================
 
-PRINT INSTELLINGEN
+WAT IS RETRACTION?
 ------------------
-• Laag hoogte: 0.2mm
-• Print snelheid: 50mm/s (40mm/s voor PETG, 15-25mm/s voor TPU)
-• Infill: 10%
-• Retraction in slicer: UIT
+Retraction trekt filament terug bij travel moves om stringing te voorkomen.
+Direct Drive: 0.2-1.0mm
+Bowden: 2-10mm
+TPU: 0-1.2mm (lage snelheid!)
 
-CURA SETUP
-----------
-1. Extensions > Post Processing > Modify G-Code
-2. Add script "Change at Z"
-3. Voeg 7 levels toe (elke 10mm) met M207 S[waarde]
 
-═══════════════════════════════════════════════════════
+CURA INSTELLEN
+================================================================================
 
-DIRECT DRIVE
-------------
-PLA:    1.0 → 1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0mm  | Speed: 30mm/s | Eindwaarde: 1.5-2.5mm
-PETG:   1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0 → 4.5mm  | Speed: 25mm/s | Eindwaarde: 2.5-3.5mm  
-ABS:    1.0 → 1.5 → 2.0 → 2.5 → 3.0 → 3.5 → 4.0mm  | Speed: 30mm/s | Eindwaarde: 1.5-2.5mm
+STAP 1: Visibility inschakelen
+-------------------------------
+1. Klik rechtsboven op "Custom" dropdown
+2. Klik op "All" of zoek "retraction"
+3. Vink aan:
+   ☑ Retraction Distance
+   ☑ Retraction Speed
+   ☑ Retraction Retract Speed (optioneel)
+   ☑ Retraction Prime Speed (optioneel)
 
-BOWDEN
-------
-PLA:    3.0 → 4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0mm   | Speed: 45mm/s | Eindwaarde: 4-6mm
-PETG:   4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0 → 10.0mm  | Speed: 45mm/s | Eindwaarde: 6-8mm
-ABS:    4.0 → 5.0 → 6.0 → 7.0 → 8.0 → 9.0 → 10.0mm  | Speed: 45mm/s | Eindwaarde: 5-7mm
+STAP 2: Retraction Distance instellen
+--------------------------------------
+Zoek "Retraction Distance" in settings
 
-TPU (ALLE SYSTEMEN)
--------------------
-0.2 → 0.5 → 0.8 → 1.0 → 1.2 → 1.5mm | Speed: 20mm/s | Eindwaarde: 0.5-1.0mm
+Direct Drive starten met:    0.6mm
+Bowden starten met:          6.0mm
+TPU starten met:             0.3mm
 
-═══════════════════════════════════════════════════════
+STAP 3: Retraction Speed instellen
+-----------------------------------
+Zoek "Retraction Speed" in settings
 
-G-CODE VOORBEELDEN
+Direct Drive:                45 mm/s
+Bowden:                      25 mm/s
+TPU:                         25 mm/s
+
+STAP 4: Optionele settings
+---------------------------
+"Retraction Retract Speed" = snelheid bij intrekken
+"Retraction Prime Speed" = snelheid bij terugduwen
+
+Meestal beide gelijk houden aan Retraction Speed!
+
+
+ORCASLICER INSTELLEN
+================================================================================
+
+STAP 1: Filament Settings openen
+---------------------------------
+1. Klik bovenin op "Filament Settings" tab (icoon met filament rol)
+2. Of: Printer Settings > Filament
+
+STAP 2: Retraction instellingen vinden
+---------------------------------------
+Scroll naar sectie: "Retraction"
+
+Je ziet:
+- Length (retraction distance)
+- Lift Z (optioneel)
+- Speed
+  - Retraction Speed
+  - Deretraction Speed
+
+STAP 3: Length (afstand) instellen
+-----------------------------------
+Direct Drive:                0.6mm
+Bowden:                      6.0mm
+TPU:                         0.3mm
+
+STAP 4: Speed instellen
+------------------------
+Retraction Speed:
+  Direct Drive:              45 mm/s
+  Bowden:                    25 mm/s
+  TPU:                       25 mm/s
+
+Deretraction Speed:
+  Meestal GELIJK aan Retraction Speed!
+
+STAP 5: Settings opslaan
+-------------------------
+1. Klik rechtsboven op diskette icoon
+2. Of: File > Save
+
+
+RETRACTION TOWER TESTEN
+================================================================================
+
+Na het instellen van deze basis waarden:
+
+1. Download retraction tower STL van werkplaatsmarc.be/retraction.html
+2. Slice met bovenstaande settings
+3. Print de tower
+4. Bekijk tussen de twee kolommen welke sectie minste stringing heeft
+5. Pas Retraction Distance aan op basis van beste sectie
+
+
+TROUBLESHOOTING
+================================================================================
+
+TE VEEL STRINGING?
 ------------------
-Z: 10mm, G-Code: M207 S2.0
-Z: 20mm, G-Code: M207 S2.5
-Z: 30mm, G-Code: M207 S3.0
-enz...
+→ Verhoog Retraction Distance met 0.2-0.5mm stappen
+→ Verlaag nozzle temperatuur met 5°C
+→ Verhoog Travel Speed
+→ Check of filament droog is
 
-EVALUATIE
----------
-✓ Kies niveau met minste stringing
-✗ Te weinig = draden tussen towers
-✗ Te veel = gaps na retractions
+UNDER-EXTRUSIE NA TRAVEL?
+--------------------------
+→ Verlaag Retraction Distance met 0.2mm stappen
+→ Verhoog Retraction Speed
+→ Check extruder spanning (te strak = slippen)
+→ Check bowden tube (slijtage?)
 
-OPSLAAN MARLIN
---------------
-M207 S[distance] F[speed]
-M500
+BLOBS BIJ START NIEUWE LAAG?
+-----------------------------
+→ Retraction Distance iets verhogen
+→ "Retraction at Layer Change" activeren (Cura)
+→ Z-Hop activeren (optioneel)
 
-OPSLAAN KLIPPER
----------------
-printer.cfg → [firmware_retraction]
-retract_length: [distance]
-retract_speed: [speed]
 
-═══════════════════════════════════════════════════════
-YouTube: Werkplaats Marc - Geavanceerde Kalibratie Deel 2
+BELANGRIJKE OPMERKINGEN
+================================================================================
+
+✓ Start ALTIJD met deze basis waardes
+✓ Wijzig in kleine stappen (0.2-0.5mm)
+✓ Test elke wijziging met een print
+✓ Noteer je beste settings per filament type
+✓ Verschillende filament merken = verschillende settings!
+
+✗ NOOIT boven 2mm voor Direct Drive
+✗ NOOIT boven 15mm voor Bowden
+✗ TPU heel voorzichtig met retraction (vaak 0mm beste!)
+
+
+VRAGEN?
+================================================================================
+YouTube: @werkplaatsmarc
+Website: werkplaatsmarc.be
+Discord: discord.gg/UfztVFcR7g
+
+Succes met calibreren!
+- Marc
